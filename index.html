@@ -81,7 +81,7 @@
   }
   .ticket::before{ left:-11px; }
   .ticket::after{ right:-11px; }
-  input[type=text], input[type=password]{
+  input[type=text], input[type=password], textarea{
     width:100%;
     background: var(--surface-2);
     border: 1px solid var(--border);
@@ -92,7 +92,8 @@
     font-family:'Inter',sans-serif;
     margin-bottom: 14px;
   }
-  input:focus{ outline:2px solid var(--gold); outline-offset:1px; }
+  textarea{ resize: vertical; min-height: 80px; }
+  input:focus, textarea:focus{ outline:2px solid var(--gold); outline-offset:1px; }
   label.field-label{
     display:block;
     font-size: 13px;
@@ -116,39 +117,17 @@
   .btn-secondary{ background: var(--surface-2); color: var(--text); border:1px solid var(--border);}
   .btn-danger{ background: transparent; color: var(--coral); border:1px solid var(--coral); }
   .btn-ghost{ background:transparent; color: var(--text-dim); border:1px solid var(--border); font-size:14px; padding:10px 14px;}
-  .option-btn{
-    display:block;
-    width:100%;
-    text-align:left;
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 16px 16px;
-    border-radius: 14px;
-    margin-bottom: 12px;
-    font-family:'Inter',sans-serif;
-    font-weight:500;
-    font-size:16px;
-    cursor:pointer;
-  }
-  .option-btn:active{ background: var(--surface); border-color: var(--gold); }
-  .option-btn.selected{ border-color: var(--gold); background: rgba(242,183,5,0.12); }
   .progress-track{
     height:6px; background: var(--surface-2); border-radius:6px; overflow:hidden; margin-bottom:20px;
   }
   .progress-fill{ height:100%; background: var(--gold); border-radius:6px; transition: width .3s ease; }
   .q-image{ width:100%; border-radius:14px; margin-bottom:16px; display:block; max-height:260px; object-fit:cover; }
   .warn-banner{
-    position: sticky; top:10px; z-index:20;
-    background: var(--coral); color:#fff;
-    font-family:'JetBrains Mono',monospace;
-    font-size:13px; font-weight:700;
     padding:10px 14px; border-radius:12px;
     margin-bottom:16px; text-align:center;
-    display:none;
+    font-family:'JetBrains Mono',monospace;
+    font-size:13px; font-weight:700;
   }
-  .warn-banner.show{ display:block; animation: pop .25s ease; }
-  @keyframes pop{ from{ transform:scale(0.92); opacity:0;} to{ transform:scale(1); opacity:1;} }
   .hidden{ display:none !important; }
   .row{ display:flex; gap:10px; }
   .row > *{ flex:1; }
@@ -161,17 +140,19 @@
   .thumb{ width:44px; height:44px; border-radius:8px; object-fit:cover; margin-right:8px; vertical-align:middle; }
   .divider{ border:none; border-top:1px dashed var(--border); margin:20px 0; }
   .score-row{
-    display:flex; align-items:center; justify-content:space-between;
+    display:flex; flex-direction:column; align-items:stretch;
     background: var(--surface-2); border:1px solid var(--border);
     border-radius:14px; padding:14px 16px; margin-bottom:10px;
   }
+  .score-row-top{ display:flex; align-items:center; justify-content:space-between; width:100%; }
   .score-row .name{ font-weight:600; font-family:'Baloo 2',sans-serif; font-size:16px; }
   .score-row .meta{ font-size:12px; color:var(--text-dim); font-family:'JetBrains Mono',monospace; margin-top:2px;}
   .score-pill{
     font-family:'JetBrains Mono',monospace; font-weight:700; font-size:15px;
     background: var(--surface); border:1px solid var(--gold); color: var(--gold);
-    padding:6px 12px; border-radius:20px;
+    padding:6px 12px; border-radius:20px; white-space:nowrap;
   }
+  .score-pill.pending{ border-color: var(--text-dim); color: var(--text-dim); }
   .medal{ font-size:20px; margin-right:6px; }
   .violation-badge{
     margin-top:10px;
@@ -183,26 +164,37 @@
     padding:6px 10px; border-radius:8px;
     display:inline-block;
   }
-  .answer-row{
-    display:flex; justify-content:space-between; align-items:flex-start;
-    padding:10px 0; border-bottom:1px solid var(--border); font-size:14px;
+  .answer-block{
+    padding:14px 0; border-bottom:1px solid var(--border);
   }
-  .answer-row:last-child{ border-bottom:none; }
-  .tag-correct{ color: var(--teal); font-weight:700; }
-  .tag-wrong{ color: var(--coral); font-weight:700; }
-  .link-btn{ background:none; border:none; color:var(--gold); font-family:'Inter',sans-serif; font-weight:600; font-size:14px; padding:0; width:auto; cursor:pointer;}
+  .answer-block:last-child{ border-bottom:none; }
+  .answer-block .qtext{ font-weight:600; margin-bottom:4px; font-size:15px; }
+  .answer-block .refans{ font-size:12px; color:var(--text-dim); margin-bottom:8px; }
+  .answer-block .theirtext{
+    background: var(--surface-2); border:1px solid var(--border); border-radius:10px;
+    padding:10px 12px; font-size:14px; margin-bottom:10px;
+  }
+  .mark-row{ display:flex; gap:8px; }
+  .mark-btn{
+    flex:1; font-family:'Inter',sans-serif; font-weight:600; font-size:13px;
+    padding:10px; border-radius:10px; cursor:pointer;
+  }
+  .mark-btn.correct{ background: transparent; border:1px solid var(--teal); color: var(--teal); }
+  .mark-btn.correct.active{ background: var(--teal); color: #06332A; }
+  .mark-btn.wrong{ background: transparent; border:1px solid var(--coral); color: var(--coral); }
+  .mark-btn.wrong.active{ background: var(--coral); color: #430E0A; }
   .empty{ text-align:center; padding: 40px 10px; color: var(--text-dim); }
   .empty .big{ font-size:40px; margin-bottom:10px; }
   .footer-note{ text-align:center; font-size:12px; color:var(--text-dim); margin-top:24px; }
-  details summary{ cursor:pointer; color:var(--text-dim); font-size:13px; margin-top:6px; }
+  .link-btn{ background:none; border:none; color:var(--gold); font-family:'Inter',sans-serif; font-weight:600; font-size:14px; padding:0; width:auto; cursor:pointer;}
 </style>
 </head>
 <body>
 <div class="wrap" id="app"></div>
 
 <script>
-const QKEY = 'famquiz_questions_v1';
-const RKEY = 'famquiz_results_v1';
+const QKEY = 'famquiz_questions_v2';
+const RKEY = 'famquiz_results_v2';
 const PINKEY = 'famquiz_pin_v1';
 
 const app = document.getElementById('app');
@@ -257,7 +249,6 @@ window.addEventListener('hashchange', ()=>{ state.screen = route(); state.adminO
 function render(){
   if(state.screen === 'loading'){ app.innerHTML = '<p class="sub">Loading…</p>'; return; }
   if(state.screen === 'home') return renderHome();
-  if(state.screen === 'name') return renderName();
   if(state.screen === 'quiz') return renderQuiz();
   if(state.screen === 'done') return renderDone();
   if(state.screen === 'adminGate') return renderAdminGate();
@@ -270,7 +261,7 @@ function renderHome(){
     ? state.questions.length + ' question' + (state.questions.length===1?'':'s') + ' loaded. Enter your name to begin.'
     : 'The quiz master has not added any questions yet - check back soon.';
   const bodyHtml = hasQuestions
-    ? '<div class="ticket"><label class="field-label">Your name <span style="color:var(--coral);">*</span></label><input type="text" id="nameInput" placeholder="e.g. Grandma Rosa" maxlength="40" /><p id="nameError" class="hidden" style="color:var(--coral); font-size:13px; margin:-8px 0 14px;">Enter your name to continue - we need to know who took the quiz.</p><button class="btn-primary" id="startBtn">Start quiz</button></div><p class="footer-note">Stay on this tab once you start - switching away is tracked.</p>'
+    ? '<div class="ticket"><label class="field-label">Your name <span style="color:var(--coral);">*</span></label><input type="text" id="nameInput" placeholder="e.g. Grandma Rosa" maxlength="40" /><p id="nameError" class="hidden" style="color:var(--coral); font-size:13px; margin:-8px 0 14px;">Enter your name to continue - we need to know who took the quiz.</p><button class="btn-primary" id="startBtn">Start quiz</button></div><p class="footer-note">Stay on this tab once you start - switching away ends the quiz.</p>'
     : '<div class="card empty"><div class="big">\uD83C\uDF9F\uFE0F</div><p>No questions yet.</p></div>';
   app.innerHTML = `
     <div class="eyebrow">Family quiz night</div>
@@ -293,6 +284,7 @@ function renderHome(){
       state.answers = [];
       state.qIndex = 0;
       state.tabSwitches = 0;
+      state.violation = false;
       state.screen = 'quiz';
       render();
     };
@@ -303,8 +295,6 @@ function renderHome(){
   }
 }
 
-function renderName(){ renderHome(); }
-
 let visibilityHandler = null;
 function attachVisibilityTracking(){
   if(visibilityHandler) document.removeEventListener('visibilitychange', visibilityHandler);
@@ -312,6 +302,10 @@ function attachVisibilityTracking(){
     if(document.hidden && state.screen === 'quiz'){
       state.tabSwitches = (state.tabSwitches||0) + 1;
       state.violation = true;
+      const q = state.questions[state.qIndex];
+      const inputEl = document.getElementById('answerInput');
+      const inProgressText = inputEl ? inputEl.value.trim() : '';
+      state.answers.push({ qId: q.id, text: inProgressText });
       submitQuiz(true);
     }
   };
@@ -323,41 +317,33 @@ function renderQuiz(){
   const total = state.questions.length;
   const pct = Math.round((state.qIndex/total)*100);
   app.innerHTML = `
-    <div class="warn-banner show" id="warnBanner" style="background: var(--gold); color:#2A1D02;">⚠ Stay on this tab - switching away ends the quiz immediately</div>
+    <div class="warn-banner" style="background: var(--gold); color:#2A1D02;">⚠ Stay on this tab - switching away ends the quiz immediately</div>
     <div class="eyebrow">Question ${state.qIndex+1} of ${total}</div>
     <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
     ${q.image ? `<img class="q-image" src="${q.image}" alt="" />` : ''}
     <h2 style="font-size:21px; margin-bottom:18px; line-height:1.3;">${escapeHtml(q.text)}</h2>
-    <div id="optsWrap"></div>
+    <textarea id="answerInput" placeholder="Type your answer here" maxlength="500"></textarea>
+    <button class="btn-primary" id="nextBtn">${state.qIndex + 1 < total ? 'Next question' : 'Submit quiz'}</button>
   `;
-  const optsWrap = document.getElementById('optsWrap');
-  q.options.forEach((opt, i)=>{
-    const btn = document.createElement('button');
-    btn.className = 'option-btn';
-    btn.textContent = opt;
-    btn.onclick = ()=>{
-      state.answers.push({ qId: q.id, chosenIndex: i, correctIndex: q.correctIndex });
-      if(state.qIndex + 1 < total){
-        state.qIndex++;
-        render();
-      }else{
-        submitQuiz();
-      }
-    };
-    optsWrap.appendChild(btn);
-  });
+  document.getElementById('nextBtn').onclick = ()=>{
+    const val = document.getElementById('answerInput').value.trim();
+    state.answers.push({ qId: q.id, text: val });
+    if(state.qIndex + 1 < total){
+      state.qIndex++;
+      render();
+    }else{
+      submitQuiz(false);
+    }
+  };
   attachVisibilityTracking();
 }
 
 async function submitQuiz(isViolation){
   if(visibilityHandler) document.removeEventListener('visibilitychange', visibilityHandler);
-  let score = 0;
-  state.answers.forEach(a=>{ if(a.chosenIndex === a.correctIndex) score++; });
   const result = {
     id: 'r_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
     name: state.playerName,
     answers: state.answers,
-    score: score,
     total: state.questions.length,
     answeredCount: state.answers.length,
     tabSwitches: state.tabSwitches || 0,
@@ -432,7 +418,7 @@ function renderAdmin(){
   app.innerHTML = `
     <div class="eyebrow">Quiz master dashboard</div>
     <h1 style="font-size:24px;">Manage & review</h1>
-    <p class="sub">Add questions, then check who got what right once everyone's played.</p>
+    <p class="sub">Add questions, then review each answer and mark it correct or wrong.</p>
 
     <div class="row" style="margin-bottom:20px;">
       <button class="btn-secondary" id="tabQ">Questions (${q.length})</button>
@@ -462,30 +448,14 @@ function renderAdminBody(){
         <label class="field-label">Photo (optional)</label>
         <input type="file" id="qImage" accept="image/*" style="margin-bottom:14px; width:100%;" />
         <div id="imgPreviewWrap"></div>
-        <label class="field-label">Options (tap the circle next to the correct one)</label>
-        <div id="optionsBuilder"></div>
-        <button class="btn-ghost" id="addOptionBtn" style="margin-bottom:14px;">+ Add option</button>
+        <label class="field-label">Reference answer (optional - just for you, not shown to players)</label>
+        <input type="text" id="qRefAnswer" placeholder="e.g. A red Volkswagen Beetle" />
         <button class="btn-primary" id="saveQBtn">Save question</button>
       </div>
       <h3 style="font-size:16px; margin: 22px 0 10px;">All questions</h3>
       <div id="qListWrap"></div>
     `;
     editingImage = null;
-    let optionCount = 0;
-    let correctIdx = 0;
-    const builder = document.getElementById('optionsBuilder');
-    function addOptionRow(prefill){
-      const idx = optionCount++;
-      const row = document.createElement('div');
-      row.style.display='flex'; row.style.alignItems='center'; row.style.gap='8px'; row.style.marginBottom='10px';
-      row.innerHTML = `
-        <input type="radio" name="correctOpt" value="${idx}" ${idx===0?'checked':''} style="width:18px;height:18px; accent-color: var(--gold); flex-shrink:0;" />
-        <input type="text" class="optText" placeholder="Option ${idx+1}" value="${prefill||''}" style="margin-bottom:0;" />
-      `;
-      builder.appendChild(row);
-    }
-    addOptionRow(); addOptionRow();
-    document.getElementById('addOptionBtn').onclick = ()=> addOptionRow();
 
     document.getElementById('qImage').onchange = async (e)=>{
       const file = e.target.files[0];
@@ -497,15 +467,12 @@ function renderAdminBody(){
 
     document.getElementById('saveQBtn').onclick = async ()=>{
       const text = document.getElementById('qText').value.trim();
-      const optionInputs = [...document.querySelectorAll('.optText')].map(i=>i.value.trim());
-      const correctRadio = document.querySelector('input[name="correctOpt"]:checked');
+      const refAnswer = document.getElementById('qRefAnswer').value.trim();
       if(!text){ alert('Add a question first.'); return; }
-      if(optionInputs.some(o=>!o)){ alert('Fill in all options or remove empty ones.'); return; }
-      if(optionInputs.length < 2){ alert('Add at least two options.'); return; }
       const newQ = {
         id: 'q_' + Date.now(),
-        text, options: optionInputs,
-        correctIndex: parseInt(correctRadio.value,10),
+        text,
+        refAnswer,
         image: editingImage
       };
       const latest = await sget(QKEY, []);
@@ -527,18 +494,18 @@ function renderQList(){
     wrap.innerHTML = `<div class="empty"><p>No questions yet — add your first one above.</p></div>`;
     return;
   }
-  wrap.innerHTML = state.questions.map((q,i)=>`
-    <div class="qlist-item">
-      <div style="display:flex; align-items:flex-start; justify-content:space-between;">
-        <div style="flex:1;">
-          ${q.image ? `<img class="thumb" src="${q.image}" />` : ''}
-          <span class="qtext">${escapeHtml(q.text)}</span>
-          <div class="qmeta">${q.options.length} options · correct: ${escapeHtml(q.options[q.correctIndex])}</div>
-        </div>
-        <button class="link-btn" data-del="${q.id}" style="color:var(--coral);">Delete</button>
-      </div>
-    </div>
-  `).join('');
+  wrap.innerHTML = state.questions.map((q,i)=>{
+    const refLine = q.refAnswer ? ('Reference: ' + escapeHtml(q.refAnswer)) : 'No reference answer set';
+    return '<div class="qlist-item">'
+      + '<div style="display:flex; align-items:flex-start; justify-content:space-between;">'
+      + '<div style="flex:1;">'
+      + (q.image ? '<img class="thumb" src="' + q.image + '" />' : '')
+      + '<span class="qtext">' + escapeHtml(q.text) + '</span>'
+      + '<div class="qmeta">' + refLine + '</div>'
+      + '</div>'
+      + '<button class="link-btn" data-del="' + q.id + '" style="color:var(--coral);">Delete</button>'
+      + '</div></div>';
+  }).join('');
   wrap.querySelectorAll('[data-del]').forEach(btn=>{
     btn.onclick = async ()=>{
       if(!confirm('Delete this question?')) return;
@@ -551,13 +518,22 @@ function renderQList(){
   });
 }
 
+function computeScore(r){
+  let correct = 0, marked = 0;
+  r.answers.forEach(a=>{
+    if(a.markedCorrect === true){ correct++; marked++; }
+    else if(a.markedCorrect === false){ marked++; }
+  });
+  return { correct, marked, total: r.total };
+}
+
 function renderResults(){
   const body = document.getElementById('adminBody');
   if(state.results.length === 0){
     body.innerHTML = `<div class="empty"><div class="big">📊</div><p>No submissions yet.</p></div>`;
     return;
   }
-  state.resultSort = state.resultSort || 'score';
+  state.resultSort = state.resultSort || 'time';
   state.resultFilter = state.resultFilter || 'all';
 
   const byTime = [...state.results].sort((a,b)=> a.submittedAt - b.submittedAt);
@@ -568,16 +544,16 @@ function renderResults(){
     ? state.results.filter(r=>r.violation)
     : state.results;
 
-  const sorted = state.resultSort === 'time'
-    ? [...list].sort((a,b)=> a.submittedAt - b.submittedAt)
-    : [...list].sort((a,b)=> b.score - a.score);
+  const sorted = state.resultSort === 'score'
+    ? [...list].sort((a,b)=> computeScore(b).correct - computeScore(a).correct)
+    : [...list].sort((a,b)=> a.submittedAt - b.submittedAt);
 
   const violationCount = state.results.filter(r=>r.violation).length;
   const medals = ['🥇','🥈','🥉'];
 
   const controlsHtml = '<div class="row" style="margin-bottom:10px;">'
-    + '<button class="btn-ghost" id="sortScoreBtn" style="' + (state.resultSort==='score' ? 'border-color: var(--gold); color: var(--gold);' : '') + '">By score</button>'
     + '<button class="btn-ghost" id="sortTimeBtn" style="' + (state.resultSort==='time' ? 'border-color: var(--gold); color: var(--gold);' : '') + '">By time submitted</button>'
+    + '<button class="btn-ghost" id="sortScoreBtn" style="' + (state.resultSort==='score' ? 'border-color: var(--gold); color: var(--gold);' : '') + '">By score</button>'
     + '</div>'
     + '<div class="row" style="margin-bottom:16px;">'
     + '<button class="btn-ghost" id="filterAllBtn" style="' + (state.resultFilter==='all' ? 'border-color: var(--gold); color: var(--gold);' : '') + '">All (' + state.results.length + ')</button>'
@@ -587,6 +563,7 @@ function renderResults(){
   const rowsHtml = sorted.length === 0
     ? '<div class="empty" style="padding:20px;"><p>No results in this view.</p></div>'
     : sorted.map((r,i)=>{
+      const sc = computeScore(r);
       const medalHtml = (state.resultSort==='score' && medals[i]) ? '<span class="medal">' + medals[i] + '</span>' : '';
       const dateStr = new Date(r.submittedAt).toLocaleString();
       const orderTag = orderMap[r.id] === 1 ? ' · first submitted' : (' · #' + orderMap[r.id] + ' to submit');
@@ -594,11 +571,13 @@ function renderResults(){
       const violationBadge = r.violation
         ? '<div class="violation-badge">⚠ Violation - left the tab</div>'
         : '';
-      return '<div class="score-row" style="cursor:pointer; flex-direction:column; align-items:stretch;" data-open="' + r.id + '">'
-        + '<div style="display:flex; align-items:center; justify-content:space-between; width:100%;">'
+      const pillLabel = sc.marked + '/' + sc.total + ' reviewed';
+      const pillClass = sc.marked < sc.total ? 'score-pill pending' : 'score-pill';
+      return '<div class="score-row" style="cursor:pointer;" data-open="' + r.id + '">'
+        + '<div class="score-row-top">'
         + '<div><div class="name">' + medalHtml + escapeHtml(r.name) + '</div>'
         + '<div class="meta">' + dateStr + orderTag + switchStr + '</div></div>'
-        + '<div class="score-pill">' + r.score + '/' + r.total + '</div>'
+        + '<div class="' + pillClass + '">' + (sc.marked === sc.total ? (sc.correct + '/' + sc.total) : pillLabel) + '</div>'
         + '</div>'
         + violationBadge
         + '</div>';
@@ -627,31 +606,51 @@ function renderResultDetail(r){
   const violationNote = r.violation
     ? '<p style="color:var(--coral); font-size:13px; margin:-4px 0 14px;">Quiz ended automatically after leaving the tab - only ' + r.answeredCount + ' of ' + r.total + ' questions were answered.</p>'
     : '';
+  const answersHtml = r.answers.map((a, idx)=>{
+    const q = state.questions.find(x=>x.id===a.qId);
+    if(!q) return '';
+    const refLine = q.refAnswer ? ('<div class="refans">Reference: ' + escapeHtml(q.refAnswer) + '</div>') : '';
+    const theirText = a.text ? escapeHtml(a.text) : '<span style="color:var(--text-dim);">(left blank)</span>';
+    const correctActive = a.markedCorrect === true ? 'active' : '';
+    const wrongActive = a.markedCorrect === false ? 'active' : '';
+    return '<div class="answer-block">'
+      + '<div class="qtext">' + escapeHtml(q.text) + '</div>'
+      + refLine
+      + '<div class="theirtext">' + theirText + '</div>'
+      + '<div class="mark-row">'
+      + '<button class="mark-btn correct ' + correctActive + '" data-mark="correct" data-idx="' + idx + '">Correct</button>'
+      + '<button class="mark-btn wrong ' + wrongActive + '" data-mark="wrong" data-idx="' + idx + '">Wrong</button>'
+      + '</div>'
+      + '</div>';
+  }).join('');
   wrap.innerHTML = `
     <div class="card">
       <h3 style="font-size:16px; margin-bottom:12px;">${escapeHtml(r.name)}'s answers</h3>
       ${violationNote}
-      ${r.answers.map(a=>{
-        const q = state.questions.find(x=>x.id===a.qId);
-        if(!q) return '';
-        const correct = a.chosenIndex === a.correctIndex;
-        return `
-          <div class="answer-row">
-            <div style="flex:1; padding-right:10px;">
-              <div>${escapeHtml(q.text)}</div>
-              <div style="color:var(--text-dim); font-size:12px; margin-top:2px;">Answered: ${escapeHtml(q.options[a.chosenIndex])}</div>
-            </div>
-            <div class="${correct?'tag-correct':'tag-wrong'}">${correct?'Correct':'Wrong'}</div>
-          </div>
-        `;
-      }).join('')}
+      ${answersHtml}
     </div>
   `;
+  wrap.querySelectorAll('[data-mark]').forEach(btn=>{
+    btn.onclick = async ()=>{
+      const idx = parseInt(btn.getAttribute('data-idx'),10);
+      const markVal = btn.getAttribute('data-mark') === 'correct';
+      const latest = await sget(RKEY, []);
+      const target = latest.find(x=>x.id===r.id);
+      if(target){
+        target.answers[idx].markedCorrect = markVal;
+        await sset(RKEY, latest);
+        state.results = latest;
+        const refreshed = latest.find(x=>x.id===r.id);
+        renderResultDetail(refreshed);
+        renderResults();
+      }
+    };
+  });
 }
 
 function escapeHtml(str){
   const div = document.createElement('div');
-  div.textContent = str;
+  div.textContent = str || '';
   return div.innerHTML;
 }
 
@@ -659,4 +658,3 @@ init();
 </script>
 </body>
 </html>
-
